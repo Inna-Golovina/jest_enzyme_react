@@ -47,7 +47,7 @@ describe('Select component', () => {
     // у нас должен рендериться не селект, а плейсхолдер
     it('should use default handleChange', () => {
       const result = Select.defaultProps.handleChange(); //в переменную мы присваиваем результат вызова метода, который идет на прямую из компонента селект
-      expect(result).toBe(undefined); // так как по умолчанию наша функция ничего не возвращает
+      expect(result).toBe('Test'); // так как по умолчанию наша функция ничего не возвращает
     })
   })
 })
