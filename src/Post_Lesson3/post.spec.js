@@ -1,5 +1,10 @@
 //Тестирование отрисовки
 
+
+
+
+
+
 import { shallow } from "enzyme";
 import React from "react";
 import Post from "./post";
