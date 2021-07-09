@@ -1,33 +1,41 @@
-import React, { Component } from "react";
+import { shallow } from "enzyme";
+import React from "react";
+import Counter from "./counter";
 
-class CounterButton extends Component {
-  state = {
-    count: 0,
-  };
+//тестирование событий клика
 
-  handleClick = () => {
-    this.setState(({ count }) => ({
-      count: ++count,
-    }));
-  };
+const setUp = () => shallow(<Counter />);
 
-  handleReset = (count) => {
-    this.setState({ count });
-  };
+describe('Count component', () => {
+  let component;
+  let instance;
+  beforeEach(() => {
+    component = setUp();
+    instance = component.instance();
+  });
 
-  render() {
-    return (
-      <div>
-        <div>{this.state.count}</div>
-        <button className="plusOneBtn" onClick={this.handleClick}>
-          +1
-        </button>
-        <button className="resetBtn" onClick={() => this.handleReset(10)}>
-          Reset to 10
-        </button>
-      </div>
-    );
-  }
-}
+  it('should render Counter component', () => { //проверяем рендеринг
+    expect(component).toMatchSnapshot();
+  });
+  //мы будем проверять снимок и симулировать нажатие
 
-export default CounterButton;
+  describe('Count handlers', () => {
+    it('should changecount value to plus one', () => { 
+      const btn = component.find('.plusOneBtn') //ищем нашу кнопку по классу
+      btn.simulate('click'); // симулируем нажатие на нее с помощью метода simulete
+      // expect(component).toMatchSnapshot(); //большие компоненты им тестировать не удобно
+      expect(component.state().count).toBe(1); // обращаемся к state компонента и проверяем дейстиветельно ли значение счетчика изменилось на + 1
+    })
+
+     it('should reset count value to 10', () => { // 1 вариант - обнуление счетчика до заданого значения
+      const btn = component.find('.resetBtn') //ищем нашу кнопку по классу
+      btn.simulate('click'); // симулируем нажатие на нее с помощью метода simulete
+      expect(component.state().count).toBe(10); // обращаемся к state компонента и проверяем дейстиветельно ли значение изменилось
+    })
+
+    it('should reset count value to custom value', () => { // 2 вариант - взять инстанс и вызвать напрямую его метод handleReset, в этом случае мы даже можем передать аргумент
+      instance.handleReset(20);
+      expect(component.state().count).toBe(20); // обращаемся к state компонента и проверяем дейстиветельно ли значение изменилось
+    })
+  });
+})
